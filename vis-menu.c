@@ -1,6 +1,14 @@
 /*
  * MIT/X Consortium License
  *
+ * © 2017 Leah Neukirchen <leah@vuxu.org>
+ *
+ * Based on vis-menu:
+ * Author: Christian Hesse <mail@eworm.de>
+ * Author: Marc André Tanner <mat@brain-dump.org>
+ * Author: Tim Allen <screwtape@froup.com>
+ *
+ * Based on slmenu:
  * © 2011 Rafael Garcia Gallego <rafael.garcia.gallego@gmail.com>
  *
  * Based on dmenu:
