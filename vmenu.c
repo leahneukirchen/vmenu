@@ -561,7 +561,7 @@ run(void) {
 
 static void
 usage(void) {
-	fputs("usage: vis-menu [-i] [-l lines] [-p prompt] [initial selection]\n", stderr);
+	fputs("usage: vmenu [-i] [-l lines] [-p prompt] [initial selection]\n", stderr);
 	exit(EXIT_FAILURE);
 }
 
