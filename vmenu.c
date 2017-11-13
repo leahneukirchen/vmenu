@@ -563,23 +563,22 @@ usage(void) {
 
 int
 main(int argc, char **argv) {
-	for (int i = 1; i < argc; i++) {
-		if (!strcmp(argv[i], "-i")) {
-			fstrncmp = strncmp;
-		} else if (argv[i][0] != '-') {
-			strncpy(text, argv[i], sizeof(text)-1);
-			cursor = strlen(text);
-		} else if (i + 1 == argc) {
-			usage();
-		} else if (!strcmp(argv[i], "-p")) {
-			prompt = argv[++i];
-			if (prompt && !prompt[0])
-				prompt = NULL;
-		} else if (!strcmp(argv[i], "-l")) {
-			lines = atoi(argv[++i]);
-		} else {
-			usage();
+	int c;
+
+        while ((c = getopt(argc, argv, "ip:l:")) != -1)
+		switch (c) {
+		case 'i': fstrncmp = strncmp; break;
+		case 'p': prompt = *optarg ? optarg : NULL; break;
+		case 'l': lines = atoi(optarg); break;
+		default: usage();
 		}
+
+	if (argc > optind + 1)
+		usage();
+	
+	if (argc == optind + 1) {
+		strncpy(text, argv[optind], sizeof(text)-1);
+		cursor = strlen(text);
 	}
 
 	readstdin();
