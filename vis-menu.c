@@ -580,10 +580,7 @@ usage(void) {
 int
 main(int argc, char **argv) {
 	for (int i = 1; i < argc; i++) {
-		if (!strcmp(argv[i], "-v")) {
-			puts("vis-menu " VERSION);
-			exit(EXIT_SUCCESS);
-		} else if (!strcmp(argv[i], "-i")) {
+		if (!strcmp(argv[i], "-i")) {
 			fstrncmp = strncasecmp;
 		} else if (!strcmp(argv[i], "-t")) {
 			barpos = +1;
