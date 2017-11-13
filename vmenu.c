@@ -106,10 +106,10 @@ calcoffsets(void) {
         int i, n = lines;
 
         for (i = 0, next = curr; next; next = next->right)
-                if ((i += (lines>0 ? 1 : MIN(textw(next->text), n))) > n)
+                if (++i > n)
                         break;
         for (i = 0, prev = curr; prev && prev->left; prev = prev->left)
-                if ((i += (lines>0 ? 1 : MIN(textw(prev->left->text), n))) > n)
+                if (++i > n)
                         break;
 }
 
@@ -486,7 +486,7 @@ run(void) {
 			sel = matchend;
 			break;
 		case CONTROL('B'):
-			if (cursor > 0 && (!sel || !sel->left || lines > 0)) {
+			if (cursor > 0) {
 				cursor = nextrune(-1);
 				break;
 			}
