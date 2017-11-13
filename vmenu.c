@@ -104,12 +104,7 @@ textw(const char *s) {
 
 static void
 calcoffsets(void) {
-        int i, n;
-
-	if (lines > 0)
-		n = lines;
-	else
-		n = mw - (promptw + inputw + textw("<") + textw(">"));
+        int i, n = lines;
 
         for (i = 0, next = curr; next; next = next->right)
                 if ((i += (lines>0 ? 1 : MIN(textw(next->text), n))) > n)
@@ -183,31 +178,17 @@ drawmenu(void) {
 	if (prompt)
 		drawtext(prompt, promptw, C_Reverse);
 
-	drawtext(text, (lines==0 && matches) ? inputw : mw-promptw, C_Normal);
+	drawtext(text, mw-promptw, C_Normal);
 
-	if (lines > 0) {
-		if (barpos != 0) resetline();
-		for (rw = 0, item = curr; item != next; rw++, item = item->right) {
-			fprintf(stderr, "\n");
-			drawtext(item->text, mw, (item == sel) ? C_Reverse : C_Normal);
-		}
-		for (; rw < lines; rw++)
-			fprintf(stderr, "\n\033[K");
-		resetline();
-	} else if (matches) {
-		rw = mw-(4+promptw+inputw);
-		if (curr->left)
-			drawtext("<", 5 /*textw("<")*/, C_Normal);
-		for (item = curr; item != next; item = item->right) {
-			drawtext(item->text, MIN(textw(item->text), rw), (item == sel) ? C_Reverse : C_Normal);
-			if ((rw -= textw(item->text)) <= 0) break;
-		}
-		if (next) {
-			fprintf(stderr, "\033[%iG", mw-5);
-			drawtext(">", 5 /*textw(">")*/, C_Normal);
-		}
-
+	if (barpos != 0) resetline();
+	for (rw = 0, item = curr; item != next; rw++, item = item->right) {
+		fprintf(stderr, "\n");
+		drawtext(item->text, mw, (item == sel) ? C_Reverse : C_Normal);
 	}
+	for (; rw < lines; rw++)
+		fprintf(stderr, "\n\033[K");
+	resetline();
+
 	fprintf(stderr, "\033[%iG", (int)(promptw+textwn(text, cursor)-1));
 	fflush(stderr);
 }
