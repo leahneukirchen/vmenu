@@ -66,7 +66,6 @@ struct Item {
 };
 
 static char   text[BUFSIZ] = "";
-static int    barpos = 0;
 static int    mw, mh;
 static int    lines = 10;
 static int    inputw, promptw;
@@ -116,8 +115,7 @@ calcoffsets(void) {
 
 static void
 cleanup() {
-	if (barpos == 0) fprintf(stderr, "\n");
-	else fprintf(stderr, "\033[G\033[K");
+	fprintf(stderr, "\n");
 	tcsetattr(0, TCSANOW, &tio_old);
 }
 
@@ -159,8 +157,7 @@ drawtext(const char *t, size_t w, Color col) {
 
 static void
 resetline(void) {
-	if (barpos != 0) fprintf(stderr, "\033[%iH", barpos > 0 ? 0 : (mh-lines));
-	else fprintf(stderr, "\033[%iF", lines);
+	fprintf(stderr, "\033[%iF", lines);
 }
 
 static void
@@ -180,7 +177,6 @@ drawmenu(void) {
 
 	drawtext(text, mw-promptw, C_Normal);
 
-	if (barpos != 0) resetline();
 	for (rw = 0, item = curr; item != next; rw++, item = item->right) {
 		fprintf(stderr, "\n");
 		drawtext(item->text, mw, (item == sel) ? C_Reverse : C_Normal);
@@ -350,7 +346,6 @@ setup(void) {
 	promptw = prompt ? textw(prompt) : 0;
 	inputw = MIN(inputw, mw/3);
 	match();
-	if (barpos != 0) resetline();
 	drawmenu();
 }
 
@@ -562,7 +557,7 @@ run(void) {
 
 static void
 usage(void) {
-	fputs("usage: vis-menu [-b|-t] [-i] [-l lines] [-p prompt] [initial selection]\n", stderr);
+	fputs("usage: vis-menu [-i] [-l lines] [-p prompt] [initial selection]\n", stderr);
 	exit(EXIT_FAILURE);
 }
 
@@ -571,10 +566,6 @@ main(int argc, char **argv) {
 	for (int i = 1; i < argc; i++) {
 		if (!strcmp(argv[i], "-i")) {
 			fstrncmp = strncasecmp;
-		} else if (!strcmp(argv[i], "-t")) {
-			barpos = +1;
-		} else if (!strcmp(argv[i], "-b")) {
-			barpos = -1;
 		} else if (argv[i][0] != '-') {
 			strncpy(text, argv[i], sizeof(text)-1);
 			cursor = strlen(text);
