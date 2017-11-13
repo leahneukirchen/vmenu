@@ -510,8 +510,12 @@ run(void) {
 			}
 			break;
 		case CONTROL('D'):
-			if (text[cursor] == '\0')
-				break;
+			if (text[cursor] == '\0') {
+				if (cursor == 0)
+					return EXIT_FAILURE;
+				else
+					break;
+			}
 			cursor = nextrune(+1);
 			/* fallthrough */
 		case CONTROL('H'):
