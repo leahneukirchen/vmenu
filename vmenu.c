@@ -241,9 +241,12 @@ match(void)
 	matches = lprefix = lsubstr = matchend = prefixend = substrend = NULL;
 	textsize = strlen(text) + 1;
 	for (item = items; item && item->text; item++) {
-		for (i = 0; i < tokc; i++)
-			if (!fstrstr(item->text, tokv[i]))
+		for (i = 0; i < tokc; i++) {
+			if (tokv[i] == '-' && fstrstr(item->text, tokv[i]+1))
 				break;
+			else if (!fstrstr(item->text, tokv[i]))
+				break;
+		}
 		if (i != tokc) /* not all tokens match */
 			continue;
 		/* exact matches go first, then prefixes, then substrings */
