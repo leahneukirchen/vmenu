@@ -68,7 +68,7 @@ struct Item {
 static char   text[BUFSIZ] = "";
 static int    barpos = 0;
 static int    mw, mh;
-static int    lines = 0;
+static int    lines = 10;
 static int    inputw, promptw;
 static size_t cursor;
 static char  *prompt = NULL;
