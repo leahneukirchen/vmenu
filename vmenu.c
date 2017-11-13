@@ -531,12 +531,12 @@ run(void) {
 			cursor = strlen(text);
 			match();
 			break;
+		case CONTROL('U'):
+			cursor = 0;
+			/* fallthrough */
 		case CONTROL('K'):
 			text[cursor] = '\0';
 			match();
-			break;
-		case CONTROL('U'):
-			insert(NULL, 0 - cursor);
 			break;
 		case CONTROL('W'):
 			while (cursor > 0 && text[nextrune(-1)] == ' ')
