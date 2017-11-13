@@ -4,15 +4,12 @@
 .Sh NAME
 .Nm vmenu
 .Nd interactively select an item from a list
-.
 .Sh SYNOPSIS
 .Nm vmenu
 .Op Fl i
-.Op Fl t | Fl b
 .Op Fl p Ar prompt
 .Op Fl l Ar lines
 .Op Ar initial
-.
 .Sh DESCRIPTION
 .Nm
 allows a user to interactively select one item from a list of options.
@@ -28,37 +25,19 @@ see
 below.
 .Bl -tag -width flag
 .It Fl i
-Use case-insensitive comparison when filtering items.
-.It Fl t | Fl b
-Normally,
-the menu is displayed on the current line of the terminal.
-When
-.Fl t
-is provided, the menu will always be drawn on the top line of the terminal.
-When
-.Fl b
-is provided, the menu will always be drawn on the bottom line.
+Use case-sensitive comparison when filtering items.
 .It Fl p Ar prompt
 Display
 .Ar prompt
 before the list of items.
 .It Fl l Ar lines
-Normally,
-the list is displayed with all the items side-by-side on a single line,
-which is space-efficient
-but does not show many items at a time,
-especially if some of them are long.
-When
-.Fl l
-is provided,
-the list is displayed with each item on its own line,
+The list is displayed with each item on its own line,
 .Ar lines
-lines high.
+lines high (default: 10).
 If there are more than
 .Ar lines
 items in the list,
-the user can scroll through them with the arrow keys,
-just like in the regular horizontal mode.
+the user can scroll through them with the arrow keys.
 .It Ar initial
 The user can type into a text field
 to filter the list of items
@@ -66,23 +45,12 @@ as well as scrolling through them.
 If supplied,
 .Ar initial
 is used as the initial content of the text field.
-.It Fl v
-Instead of displaying an interactive menu,
-.Nm
-prints its version number to standard output and exits.
 .El
-.
 .Sh USAGE
 .Nm
 displays the prompt (if any),
 a text field,
 and a list of items.
-Normally these are presented side-by-side in a single line,
-but if the
-.Fl l
-flag is given,
-the prompt and typing area will be on the first line,
-and list items on the following lines.
 .Pp
 The following commands are available:
 .Bl -tag -width ".Sy Control-A"
@@ -129,7 +97,7 @@ or
 scrolls to show the previous page of list items.
 .It Xo Sy PageDown
 or
-.Sy Meta-v
+.Sy Meta-V
 .Xc
 scrolls to show the next page of list items.
 .It Xo Sy Home
@@ -144,21 +112,22 @@ or
 .Xc
 move the cursor to the end of the text field
 or scroll to the last item in the list.
-.It Sy Meta-b
+.It Sy Meta-B
 moves the cursor to the beginning of the current word in the text field.
-.It Sy Meta-f
+.It Sy Meta-F
 moves the cursor past the end of the current word in the text field.
 .It Sy Tab
 copies the content of the selected list item into the text field.
 This is almost, but not quite, like tab completion.
-.It Xo Sy Delete
-or
-.Sy Control-D
-.Xc
+.It Sy Delete
 delete the character in the text field under the cursor.
+.It Sy Control-D
+delete the character in the text field under the cursor,
+if it is empty,
+exit without selecting any item.
 .It Sy Backspace
 deletes the character in the text field to the left of the cursor.
-.It Sy Meta-d
+.It Sy Meta-D
 deletes the characters in the text field
 from the character under the cursor
 to the next space.
@@ -166,10 +135,7 @@ to the next space.
 deletes the characters in the text field
 from the character under the cursor to the end.
 .It Sy Control-U
-deletes the characters in the text field
-from the beginning up to
-(but not including)
-the character under the cursor.
+delete contents of text field
 .It Sy Control-W
 deletes the characters in the text field
 from the previous space up to
@@ -191,18 +157,16 @@ then hits Enter to select the
 .Dq currently highlighted
 item,
 the text they typed will be returned instead.
-.
 .Sh EXAMPLES
 Here's a shell-script that allows the user to choose a number from one to 10:
 .Bd -literal -offset indent
-NUMBER=$(seq 1 10 | vis-menu -p "Choose a number")
+NUMBER=$(seq 1 10 | vmenu -p "Choose a number")
 if [ $? -eq 0 ]; then
 	echo "You chose: $NUMBER"
 else
 	echo "You refused to choose a number, or an error occurred."
 fi
 .Ed
-.
 .Sh DIAGNOSTICS
 The
 .Nm
