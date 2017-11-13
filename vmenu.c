@@ -344,7 +344,9 @@ setup(void) {
 	tio_new.c_cc[VMIN] = 1;
 	tcsetattr(0, TCSANOW, &tio_new);
 
-	lines = MIN(MAX(lines, 0), mh);
+	lines = MIN(MAX(lines, 0), mh - 1);
+	if (lines == 0)
+		lines = mh - 1;
 	promptw = prompt ? textw(prompt) : 0;
 	inputw = MIN(inputw, mw/3);
 	match();
