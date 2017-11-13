@@ -75,7 +75,7 @@ static Item  *items = NULL;
 static Item  *matches, *matchend;
 static Item  *prev, *curr, *next, *sel;
 static struct termios tio_old, tio_new;
-static int  (*fstrncmp)(const char *, const char *, size_t) = strncmp;
+static int  (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
 
 static void
 appenditem(Item *item, Item **list, Item **last) {
@@ -565,7 +565,7 @@ int
 main(int argc, char **argv) {
 	for (int i = 1; i < argc; i++) {
 		if (!strcmp(argv[i], "-i")) {
-			fstrncmp = strncasecmp;
+			fstrncmp = strncmp;
 		} else if (argv[i][0] != '-') {
 			strncpy(text, argv[i], sizeof(text)-1);
 			cursor = strlen(text);
